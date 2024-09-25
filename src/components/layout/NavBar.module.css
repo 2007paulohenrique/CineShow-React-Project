@@ -1,0 +1,40 @@
+.navBar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1em;
+    background-color: var(--background-color-dark);
+}
+
+.navBar ul {
+    display: flex;
+    gap: 0.2em;
+    list-style: none;
+    font-weight: bold;
+}
+
+.navBar ul a {
+    padding: 0.5em;
+    color: var(--theme-font-color);
+    transition: background-color 0.3s ease-in-out;
+}
+
+.navBar ul li {
+    display: flex;
+}
+
+.navBar ul a:hover {
+    background-color: black;
+}
+
+.navBar .icon_link {
+    display: block;
+    height: max-content;
+    width: max-content;
+}
+
+.navBar .icon_link img {
+    display: block;
+    filter: drop-shadow(1px 1px 2px white);
+    height: 4em;
+}

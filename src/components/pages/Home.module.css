@@ -1,0 +1,23 @@
+.home {
+    background-color: var(--background-color-light);
+    color: var(--font-color-light);
+    padding: 1em;
+    text-align: center;
+    flex: 1;
+}
+
+.slogan {
+    color: var(--font-color-medium);
+}
+
+.cine {
+    color: var(--font-color-dark);
+}
+
+.show {
+    color: var(--theme-font-color);
+}
+
+.welcome {
+    margin-bottom: 3em;
+}

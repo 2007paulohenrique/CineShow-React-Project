@@ -1,0 +1,33 @@
+:root {
+    --font-color-dark: #000000;
+    --theme-font-color: #840000;
+    --font-color-light: #c9c9c9;
+    --font-color-medium: #6d6d6d;
+    --background-color-dark: #090909;
+    --background-color-light: #232323;
+}
+
+html,
+body,
+#root {
+    height: 100%;
+    width: 100%;
+}
+
+#root {
+    display: flex;
+    flex-direction: column;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: "Roboto", "Open Sans", sans-serif;
+    /* border: 1px solid red; */
+}
+
+a {
+    text-decoration: none;
+    color: var(--font-color-dark);
+}
