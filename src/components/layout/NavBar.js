@@ -9,6 +9,7 @@ function NavBar() {
             <Link to="/" className={styles.icon_link}><img src={Icon} alt="CineShow Icon" /></Link>
             <ul className={styles.link_list}>
                 <li><Link to="/">Home</Link></li>
+                <li><Link to="/login">Login</Link></li>
             </ul>
         </nav>
     );

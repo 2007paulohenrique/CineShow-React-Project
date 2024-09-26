@@ -1,9 +1,5 @@
 .home {
-    background-color: var(--background-color-light);
-    color: var(--font-color-light);
-    padding: 1em;
     text-align: center;
-    flex: 1;
 }
 
 .slogan {
@@ -20,4 +16,11 @@
 
 .welcome {
     margin-bottom: 3em;
+}
+
+.sections {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 4.5em;
 }

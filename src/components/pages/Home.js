@@ -1,5 +1,4 @@
 import styles from "./Home.module.css";
-import Logo from "../../img/CineShow-Logo.png";
 
 function Home() {
     return (
@@ -9,15 +8,21 @@ function Home() {
                 <p className={styles.slogan}>O cinema que te mostra a beleza das grandes telas.</p>
             </div>
 
-            <section className={styles.movies}>
-                <h2>Filmes em cartaz:</h2>
+            <div className={styles.sections}>
+                <section className={styles.popular}>
+                    <h2>O mais popular:</h2>
+                </section>
 
-            </section>
+                <section className={styles.movies}>
+                    <h2>Filmes em cartaz:</h2>
 
-            <section className={styles.cinemas}> 
-                <h2>Nossos cinemas:</h2>
+                </section>
 
-            </section>
+                <section className={styles.cinemas}> 
+                    <h2>Nossos cinemas:</h2>
+
+                </section>
+            </div>
         </main>
     );
 }
