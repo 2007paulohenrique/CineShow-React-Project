@@ -1,0 +1,20 @@
+.input_container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.input_container input {
+    height: 3em;
+    padding: 0 1em;
+    border-radius: 1.5em;
+    background-color: var(--background-color-light);
+    outline: none;
+    border: 1px solid var(--font-color-light);
+    color: var(--font-color-light);
+}
+
+.input_container label {
+    margin-left: 1em;
+    margin-bottom: 0.5em;
+}
