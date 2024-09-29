@@ -1,4 +1,13 @@
 {
-    "moviesShowing": [],
-    "movie": {}
+  "moviesShowing": [],
+  "movies": [],
+  "users": [
+    {
+      "id": "03fa",
+      "name": "paulo henrique",
+      "email": "paulo@gmail.com",
+      "phone": "11 11111-1111",
+      "password": "12345"
+    }
+  ]
 }
