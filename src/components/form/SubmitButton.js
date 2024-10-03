@@ -1,7 +1,8 @@
+import Button from "../layout/Button";
 import styles from "./SubmitButton.module.css";
 
 function SubmitButton({text, handleSubmit}) {
-    return <button type="submit" onClick={handleSubmit} className={styles.button}>{text}</button>
+    return <Button type="submit" text={text} handleClick={handleSubmit} customClass={styles.submit_button}/>
 }
 
 export default SubmitButton;

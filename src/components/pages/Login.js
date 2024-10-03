@@ -5,10 +5,13 @@ import GoogleIcon from "../../img/Google_Icon.png";
 import { useEffect, useState } from "react";
 import bcrypt from "bcryptjs";
 import { useNavigate } from "react-router-dom";
+import Button from "../layout/Button";
 
 function Login() {
     const [user, setUser] = useState({});
     const [users, setUsers] = useState([]);
+    // Estado para o tipo do formulário. Caso seja login, true, caso seja sign in, false.
+    const [login, setLogin] = useState(false);
 
     const navigate = useNavigate();
 
@@ -28,8 +31,8 @@ function Login() {
 
     async function validateUserExistence(user) {
         for (const us of users) {
-            const emailMatch = await verifyDataMatch(user.email, us.email);
-            const phoneMatch = us.phone === user.phone;
+            const emailMatch = await verifyDataMatch(user.emailR, us.emailR);
+            const phoneMatch = us.phoneR === user.phoneR;
     
             if (emailMatch || phoneMatch) {
                 return true;
@@ -39,13 +42,28 @@ function Login() {
         return false;
     }
 
+    async function userMatchLogin(user) {
+        for (const us of users) {
+            const emailMatch = await verifyDataMatch(user.emailL, us.emailR);
+            const passwordMatch = await verifyDataMatch(user.passwordL, us.passwordR);
+            
+            if (emailMatch && passwordMatch) {
+                setUser(us);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     function validateEmptyField() {
-        const inputs = document.getElementsByTagName("input");
+        const inputs = !login ? document.querySelectorAll("#login input") : document.querySelectorAll("#signup input");
+        console.log(inputs);
         const inputsArray = Array.from(inputs);
         
         return inputsArray.some((input) => !input.value);  
     }
-
+    
     function validateNameLength(name) {
         return name.length > 50;
     }
@@ -56,7 +74,7 @@ function Login() {
         if (name.length > 0) {
             name = name.replace(/\s+/g, " ").split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
         }
-
+        
         e.target.value = name;
     }
 
@@ -100,10 +118,10 @@ function Login() {
     function formatPassword(e) {
         let password = e.target.value.trim().replace(/[^a-zA-Z\d]+/g, "");
         password = password.replace(/\s/g, "");
-
+        
         e.target.value = password;
     }
-
+    
     async function hashData(data) {
         const saltRounds = 10;
 
@@ -125,11 +143,39 @@ function Login() {
         }
     }
 
+    function loginTransition() {
+        const cta = document.getElementById("cta");
+        const loginForm = document.getElementById("login");
+        const signupForm = document.getElementById("signup");
+
+        if (login) {
+            signupForm.reset();
+            loginForm.style.setProperty("opacity", "1");
+            signupForm.style.setProperty("opacity", "0");
+            signupForm.style.setProperty("transform", "translateY(40%)");
+            loginForm.style.setProperty("transform", "none");
+            cta.style.setProperty("left", "0");
+            cta.style.setProperty("box-shadow", "inset 20px 0 40px black");
+        } else {
+            loginForm.reset();
+            loginForm.style.setProperty("opacity", "0");
+            signupForm.style.setProperty("opacity", "1");
+            loginForm.style.setProperty("transform", "translateY(40%)");
+            signupForm.style.setProperty("transform", "none");
+            cta.style.setProperty("left", "46.2%");
+            cta.style.setProperty("box-shadow", "inset -20px 0 40px black");
+        }
+
+        setLogin(!login);
+        setUser({});
+    }
+
     function handleChange(e) {
         setUser({...user, [e.target.name]: e.target.value.trim()});
     }
 
-    async function handleSubmit(e) {
+    async function signUpSubmit(e) {
+        console.log(user);
         e.preventDefault();
 
         if (validateEmptyField()) {
@@ -137,26 +183,26 @@ function Login() {
             return;
         }
         
-        if (validateNameLength(user.name)) {
+        if (validateNameLength(user.nameR)) {
             console.log("nome muito longo");
             return;  
         }
-
-        if (validateEmail(user.email)) {
+        
+        if (validateEmail(user.emailR)) {
             console.log("email incorreto");
             return;  
         }
 
-        if (validatePhone(user.phone)) {
+        if (validatePhone(user.phoneR)) {
             console.log("telefone invalido");
             return;  
         }
 
-        if (validatePassword(user.password)) {
+        if (validatePassword(user.passwordR)) {
             console.log("senha invalida");
             return;  
         }
-
+        
         const userExists = await validateUserExistence(user);
 
         if (userExists) {
@@ -164,11 +210,11 @@ function Login() {
             return;  
         }
 
-        const hashedPassword = await hashData(user.password);
-        const hashedEmail = await hashData(user.email);
+        const hashedPassword = await hashData(user.passwordR);
+        const hashedEmail = await hashData(user.emailR);
 
-        const newUser = {...user, "password": hashedPassword, "email": hashedEmail};
-
+        const newUser = {...user, "passwordR": hashedPassword, "emailR": hashedEmail};
+        
         fetch('http://localhost:5000/users', {
             method: 'POST',
             headers: {
@@ -184,15 +230,36 @@ function Login() {
             })
             .catch(err => console.log(err))
     }
+    
+    async function loginSubmit(e) {
+        console.log(user);
+        e.preventDefault();
+        
+        if (validateEmptyField()) {
+            console.log("campos vazios");
+            return;
+        }
+        
+        const userMatch = await userMatchLogin(user);
+        
+        console.log(userMatch);
+
+        if (!userMatch) {
+            console.log("Email ou senha incorretos.");
+            return;
+        }
+        
+        navigate("/");
+    }
 
     function handlePasswordContainer() {
-        setUser({...user, "password": null})
+        setUser({...user, "passwordR": null})
 
-        const password = document.getElementById("password").value;
-        const confirmedPassword = document.getElementById("confirmedPassword").value;
+        const password = document.getElementById("passwordR").value;
+        const confirmedPassword = document.getElementById("confirmedPasswordR").value;
 
         if (password === confirmedPassword) {
-            setUser({...user, "password": confirmedPassword});
+            setUser({...user, "passwordR": confirmedPassword});
             return;
         }
 
@@ -202,30 +269,54 @@ function Login() {
     return (
         <main className={styles.login}>
             <div className={styles.login_container}>
-                <form className={styles.login_form} onSubmit={handleSubmit}>
-                    <h1>Login</h1>
-                    <Input name="name" type="text" placeholder="Insira seu nome" text="Nome" handleOnChange={handleChange} handleOnInput={formatName}/>
-                    <Input name="email" type="email" placeholder="Insira seu e-mail" text="E-mail" handleOnChange={handleChange} handleOnInput={formatEmail}/>
-                    <Input name="phone" type="tel" placeholder="(XX) 9XXXX-XXXX" text="Telefone" handleOnChange={handleChange} handleOnInput={formatPhone}/>
-                    <div className={styles.password_container}>
-                        <Input name="password" type="password" placeholder="Insira sua senha" text="Senha" handleOnChange={handlePasswordContainer} handleOnInput={formatPassword}/>
-                        <Input name="confirmedPassword" type="password" placeholder="Confirme sua senha" handleOnChange={handlePasswordContainer} handleOnInput={formatPassword}/>
-                    </div>
-                    <div className={styles.buttons}>
-                        <SubmitButton  text="Criar conta"/>
-                        <span>ou</span>
-                        <button type="button" className={styles.sign_in_google}><img src={GoogleIcon} alt="Google Icon"/>Criar com Google</button>
-                    </div>
-                </form>
-                <div className={styles.cta}>
+                <div className={styles.forms}>
+                    <form className={styles.login_form} id="signup">
+                        <h1>Registrar</h1>
+                        <Input name="nameR" type="text" placeholder="Insira seu nome" text="Nome" handleOnChange={handleChange} handleOnInput={formatName}/>
+                        <Input name="emailR" type="email" placeholder="Insira seu e-mail" text="E-mail" handleOnChange={handleChange} handleOnInput={formatEmail}/>
+                        <Input name="phoneR" type="tel" placeholder="(XX) 9XXXX-XXXX" text="Telefone" handleOnChange={handleChange} handleOnInput={formatPhone}/>
+                        <div className={styles.password_container}>
+                            <Input name="passwordR" type="password" placeholder="Insira sua senha" text="Senha" handleOnChange={handlePasswordContainer} handleOnInput={formatPassword}/>
+                            <Input name="confirmedPasswordR" type="password" placeholder="Confirme sua senha" handleOnChange={handlePasswordContainer} handleOnInput={formatPassword}/>
+                        </div>
+                        <div className={styles.buttons}>
+                            <SubmitButton  text="Criar conta" handleSubmit={signUpSubmit}/>
+                            <button type="button" className={styles.sign_in_google}><img src={GoogleIcon} alt="Google Icon"/>Criar com Google</button>                        
+                        </div>
+                    </form>
+                    <form className={styles.login_form} id="login">
+                        <h1>Entrar</h1>
+                        <div className={styles.signup_fields}>
+                            <Input name="emailL" type="email" placeholder="Insira seu e-mail" text="E-mail" handleOnChange={handleChange} handleOnInput={formatEmail}/>
+                            <Input name="passwordL" type="password" placeholder="Insira sua senha" text="Senha" handleOnChange={handleChange} handleOnInput={formatPassword}/>
+                            <div className={styles.buttons}>
+                                <SubmitButton  text="Entrar" handleSubmit={loginSubmit}/>
+                                <button type="button" className={styles.sign_in_google}><img src={GoogleIcon} alt="Google Icon"/>Entrar com Google</button>                        
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div className={styles.cta} id="cta">
                     <div className={styles.cta_title}>
-                        <h2>Cine<span>Show</span></h2>
+                        <h2>CineShow</h2>
                         <hr/>
                     </div>
                     <div className={styles.cta_text}>
                         <p>Prepare-se para voar pelo universo dos filmes e ter experiências inesquecíveis com CineShow!</p>
-                        <p>Crie uma conta e aproveite todos os nossos serviços.</p>
+                        {login ? (
+                            <p>Crie uma conta e aproveite todos os nossos serviços.</p>
+                        ) : (
+                            <p>Entre na sua conta e volte a aproveitar nossos serviços.</p>
+                        )}
+                        <span>ou</span>
                     </div>
+
+                    <Button 
+                        type="button" 
+                        text={login ? "Entrar em uma conta" : "Criar conta"} 
+                        handleClick={loginTransition} 
+                        customClass={styles.login_button}
+                    />
                 </div>
             </div>
         </main>

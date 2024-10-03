@@ -1,11 +1,11 @@
-import styles from "./LinkButton.module.css";
+import Button from "./Button";
 import { Link } from "react-router-dom";
 
 function LinkButton({to, text}) {
     return (
-        <button type="button" className={styles.button}>
+        <Button type="button" >
             <Link to={to}>{text}</Link>
-        </button>
+        </Button>
     );
 }
 

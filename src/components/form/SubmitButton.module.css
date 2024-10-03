@@ -1,20 +1,4 @@
-.button {
-    background-image: linear-gradient(to top, #550707,  var(--theme-font-color));
-    color: var(--font-color-dark);
-    font-weight: bold;
-    border: 2px solid black;
-    border-radius: 7px;
-    width: max-content;
-    height: max-content;
-    font-size: 1em;
-    transition: all 0.2s ease-in;
-    letter-spacing: 1px;
+.submit_button {
     padding: 0.3em 0.5em;
-    cursor: pointer;
-    margin-top: 1em;
 }
 
-.button:hover {
-    background-image: linear-gradient(to top, var(--font-color-dark), var(--font-color-dark));
-    color: var(--font-color-light)
-}
