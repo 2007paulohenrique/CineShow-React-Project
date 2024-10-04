@@ -4,7 +4,7 @@ import styles from "./Login.module.css";
 import GoogleIcon from "../../img/Google_Icon.png";
 import { useEffect, useState } from "react";
 import bcrypt from "bcryptjs";
-import { useNavigate } from "react-router-dom";
+import { Await, useNavigate } from "react-router-dom";
 import Button from "../layout/Button";
 
 function Login() {
@@ -12,6 +12,7 @@ function Login() {
     const [users, setUsers] = useState([]);
     // Estado para o tipo do formulário. Caso seja login, true, caso seja sign in, false.
     const [login, setLogin] = useState(false);
+    const [loginTypeEmail, setLoginTypeEmail] = useState(true);
 
     const navigate = useNavigate();
 
@@ -31,8 +32,8 @@ function Login() {
 
     async function validateUserExistence(user) {
         for (const us of users) {
-            const emailMatch = await verifyDataMatch(user.emailR, us.emailR);
-            const phoneMatch = us.phoneR === user.phoneR;
+            const emailMatch = await verifyDataMatch(user.email, us.email);
+            const phoneMatch = await verifyDataMatch(user.phone, us.phone);
     
             if (emailMatch || phoneMatch) {
                 return true;
@@ -42,12 +43,23 @@ function Login() {
         return false;
     }
 
-    async function userMatchLogin(user) {
+    async function userMatchLogin(userLogin) {
+        let loginData;
+        let userData;
+        
+        if (loginTypeEmail) {
+            loginData = userLogin.emailLogin;
+            userData = "email";
+        } else {
+            loginData = userLogin.phoneLogin;
+            userData = "phone";   
+        }
+        
         for (const us of users) {
-            const emailMatch = await verifyDataMatch(user.emailL, us.emailR);
-            const passwordMatch = await verifyDataMatch(user.passwordL, us.passwordR);
-            
-            if (emailMatch && passwordMatch) {
+            const passwordMatch = await verifyDataMatch(userLogin.passwordLogin, us.password);
+            const dataMatch = await verifyDataMatch(loginData, us[userData]);
+                          
+            if (dataMatch && passwordMatch) {
                 setUser(us);
                 return true;
             }
@@ -79,8 +91,8 @@ function Login() {
     }
 
     function validateEmail(email) {
-        const emailRegex = /^[a-zA-Z0-9_.±]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/;
-        return !emailRegex.test(email);
+        const emailegex = /^[a-zA-Z0-9_.±]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/;
+        return !emailegex.test(email);
     }
 
     function formatEmail(e) {
@@ -88,8 +100,8 @@ function Login() {
     }
 
     function validatePhone(phone) {
-        const phoneRegex = /^\(\d{2}\) 9\d{4}-\d{4}$/;
-        return !phoneRegex.test(phone);
+        const phoneegex = /^\(\d{2}\) 9\d{4}-\d{4}$/;
+        return !phoneegex.test(phone);
     }
 
     function formatPhone(e) {
@@ -111,8 +123,8 @@ function Login() {
     }
 
     function validatePassword(password) {
-        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,20}$/;
-        return !passwordRegex.test(password);
+        const passwordegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,20}$/;
+        return !passwordegex.test(password);
     }
 
     function formatPassword(e) {
@@ -123,7 +135,7 @@ function Login() {
     }
     
     async function hashData(data) {
-        const saltRounds = 10;
+        const saltRounds = 12;
 
         try {
             const salt = await bcrypt.genSalt(saltRounds);
@@ -143,7 +155,7 @@ function Login() {
         }
     }
 
-    function loginTransition() {
+    function loginFormTransition() {
         const cta = document.getElementById("cta");
         const loginForm = document.getElementById("login");
         const signupForm = document.getElementById("signup");
@@ -170,6 +182,13 @@ function Login() {
         setUser({});
     }
 
+    function loginTypeTransition() {
+        setUser({});
+        setLoginTypeEmail(!loginTypeEmail);
+        const loginForm = document.getElementById("login");
+        loginForm.reset();
+    }
+
     function handleChange(e) {
         setUser({...user, [e.target.name]: e.target.value.trim()});
     }
@@ -183,22 +202,22 @@ function Login() {
             return;
         }
         
-        if (validateNameLength(user.nameR)) {
+        if (validateNameLength(user.name)) {
             console.log("nome muito longo");
             return;  
         }
         
-        if (validateEmail(user.emailR)) {
+        if (validateEmail(user.email)) {
             console.log("email incorreto");
             return;  
         }
 
-        if (validatePhone(user.phoneR)) {
+        if (validatePhone(user.phone)) {
             console.log("telefone invalido");
             return;  
         }
 
-        if (validatePassword(user.passwordR)) {
+        if (validatePassword(user.password)) {
             console.log("senha invalida");
             return;  
         }
@@ -210,10 +229,11 @@ function Login() {
             return;  
         }
 
-        const hashedPassword = await hashData(user.passwordR);
-        const hashedEmail = await hashData(user.emailR);
+        const hashedPassword = await hashData(user.password);
+        const hashedEmail = await hashData(user.email);
+        const hashedPhone = await hashData(user.phone);
 
-        const newUser = {...user, "passwordR": hashedPassword, "emailR": hashedEmail};
+        const newUser = {...user, "password": hashedPassword, "email": hashedEmail, "phone": hashedPhone};
         
         fetch('http://localhost:5000/users', {
             method: 'POST',
@@ -253,13 +273,13 @@ function Login() {
     }
 
     function handlePasswordContainer() {
-        setUser({...user, "passwordR": null})
+        setUser({...user, "password": null})
 
-        const password = document.getElementById("passwordR").value;
-        const confirmedPassword = document.getElementById("confirmedPasswordR").value;
+        const password = document.getElementById("password").value;
+        const confirmedPassword = document.getElementById("confirmedPassword").value;
 
         if (password === confirmedPassword) {
-            setUser({...user, "passwordR": confirmedPassword});
+            setUser({...user, "password": confirmedPassword});
             return;
         }
 
@@ -272,12 +292,12 @@ function Login() {
                 <div className={styles.forms}>
                     <form className={styles.login_form} id="signup">
                         <h1>Registrar</h1>
-                        <Input name="nameR" type="text" placeholder="Insira seu nome" text="Nome" handleOnChange={handleChange} handleOnInput={formatName}/>
-                        <Input name="emailR" type="email" placeholder="Insira seu e-mail" text="E-mail" handleOnChange={handleChange} handleOnInput={formatEmail}/>
-                        <Input name="phoneR" type="tel" placeholder="(XX) 9XXXX-XXXX" text="Telefone" handleOnChange={handleChange} handleOnInput={formatPhone}/>
+                        <Input name="name" type="text" placeholder="Insira seu nome" text="Nome" handleOnChange={handleChange} handleOnInput={formatName}/>
+                        <Input name="email" type="email" placeholder="Insira seu e-mail" text="E-mail" handleOnChange={handleChange} handleOnInput={formatEmail}/>
+                        <Input name="phone" type="tel" placeholder="(XX) 9XXXX-XXXX" text="Telefone" handleOnChange={handleChange} handleOnInput={formatPhone}/>
                         <div className={styles.password_container}>
-                            <Input name="passwordR" type="password" placeholder="Insira sua senha" text="Senha" handleOnChange={handlePasswordContainer} handleOnInput={formatPassword}/>
-                            <Input name="confirmedPasswordR" type="password" placeholder="Confirme sua senha" handleOnChange={handlePasswordContainer} handleOnInput={formatPassword}/>
+                            <Input name="password" type="password" placeholder="Insira sua senha" text="Senha" handleOnChange={handlePasswordContainer} handleOnInput={formatPassword}/>
+                            <Input name="confirmedPassword" type="password" placeholder="Confirme sua senha" handleOnChange={handlePasswordContainer} handleOnInput={formatPassword}/>
                         </div>
                         <div className={styles.buttons}>
                             <SubmitButton  text="Criar conta" handleSubmit={signUpSubmit}/>
@@ -287,11 +307,16 @@ function Login() {
                     <form className={styles.login_form} id="login">
                         <h1>Entrar</h1>
                         <div className={styles.signup_fields}>
-                            <Input name="emailL" type="email" placeholder="Insira seu e-mail" text="E-mail" handleOnChange={handleChange} handleOnInput={formatEmail}/>
-                            <Input name="passwordL" type="password" placeholder="Insira sua senha" text="Senha" handleOnChange={handleChange} handleOnInput={formatPassword}/>
+                            {loginTypeEmail ? (
+                                <Input name="emailLogin" type="email" placeholder="Insira seu e-mail" text="E-mail" handleOnChange={handleChange} handleOnInput={formatEmail}/>
+                            ) : (
+                                <Input name="phoneLogin" type="phone" placeholder="(XX) 9XXXX-XXXX" text="Telefone" handleOnChange={handleChange} handleOnInput={formatPhone}/>
+                            )}
+                            <Input name="passwordLogin" type="password" placeholder="Insira sua senha" text="Senha" handleOnChange={handleChange} handleOnInput={formatPassword}/>
                             <div className={styles.buttons}>
                                 <SubmitButton  text="Entrar" handleSubmit={loginSubmit}/>
                                 <button type="button" className={styles.sign_in_google}><img src={GoogleIcon} alt="Google Icon"/>Entrar com Google</button>                        
+                                <Button type="button" text={loginTypeEmail ? "Entrar com telefone" : "Entrar com e-mail"} handleClick={loginTypeTransition} customClass={styles.login_button}/>
                             </div>
                         </div>
                     </form>
@@ -314,7 +339,7 @@ function Login() {
                     <Button 
                         type="button" 
                         text={login ? "Entrar em uma conta" : "Criar conta"} 
-                        handleClick={loginTransition} 
+                        handleClick={loginFormTransition} 
                         customClass={styles.login_button}
                     />
                 </div>
