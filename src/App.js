@@ -2,7 +2,7 @@ import { Route, BrowserRouter as Router, Routes, useLocation } from "react-route
 import Home from "./components/pages/Home";
 import NavBar from "./components/layout/NavBar";
 import Footer from "./components/layout/Footer";
-import Login from "./components/pages/Login";
+import Login from "./components/pages/login/Login";
 
 function Layout({children}) {
   const location = useLocation();

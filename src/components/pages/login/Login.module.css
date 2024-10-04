@@ -3,7 +3,7 @@
     justify-content: center;
     align-items: center;
     padding: 0;
-    background: var(--background-color-light) url(../../img/Login-Background.svg) no-repeat center/cover;
+    background: var(--background-color-light) url(../../../img/Login-Background.svg) no-repeat center/cover;
 }
 
 .login_container {
@@ -126,7 +126,7 @@
 }
 
 .login_button {
-    margin-top: 1em;
     border-width: 1px;
     padding: 0.3em 0.5em;
+    margin: 0 auto;
 }

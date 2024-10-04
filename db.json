@@ -3,11 +3,11 @@
   "movies": [],
   "users": [
     {
-      "id": "62b7",
+      "id": "9873",
       "name": "Paulo Henrique",
-      "email": "$2a$12$sWvGr2Ed3t3akKJWDwggk.3L7SGLKZMSLg0oG7wUZ2X9LvtABZmAG",
-      "phone": "$2a$12$D5WwZRdgwntL43T8WrCgq.CoiWWPSkxL0GWkVaPkzhJpgLuRp1fi6",
-      "password": "$2a$12$rLGgt8tdxkcHmPufyMhhFeFT2nnjSpxTa19/k1lWDyKP5iESJgKdu"
+      "email": "$2a$12$WV0AH7zsRz6kpbdEXYVgVOTg1w66fFDIOTusVQKm8T4fMvvCDBMYa",
+      "phone": "$2a$12$7/23LgNSz1q4YSmZPcq0BOSo5mg1zTGqWMC4o7dsssNn/B6z/5.6W",
+      "password": "$2a$12$GCaQhnOe.Wd5RKc/Zrx9ausyVsHkmbnZ9oKCFYmR9qBgRoMWSlwpm"
     }
   ]
 }
