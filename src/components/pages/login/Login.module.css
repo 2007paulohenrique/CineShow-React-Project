@@ -6,6 +6,10 @@
     background: var(--background-color-light) url(../../../img/Login-Background.svg) no-repeat center/cover;
 }
 
+* {
+    /* border: 1px solid blue; */
+}
+
 .login_container {
     overflow: hidden;
     display: flex;
@@ -51,6 +55,8 @@
 
 .cta_title hr {
     border: 1px solid black;
+    width: 11em;
+    margin: 0 auto;
 }
 
 
@@ -58,6 +64,7 @@
     display: flex;
     flex-direction: column;
     gap: 1em;
+    transition: opacity 1s ease;
 }
 
 .login_form {
@@ -73,7 +80,7 @@
     transition: opacity 1.2s ease-in-out, transform 0.8s ease-in-out;
 }
 
-.signup_fields {
+.login_fields {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -129,4 +136,91 @@
     border-width: 1px;
     padding: 0.3em 0.5em;
     margin: 0 auto;
+}
+
+.login_form:first-child {
+    opacity: 0;
+    transform: translateY(40%);
+}
+
+@media screen and (max-width: 650px) {
+    .cta {
+        position: static;
+        padding: 1em 3em;
+        width: 100%;
+        height: max-content;
+        box-shadow: inset 0px 20px 40px black;
+    }
+
+    .forms {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .login_container {
+        position: relative;
+        flex-direction: column-reverse;
+        width: 80%;
+    }
+
+    .login_form {
+        width: 100%;
+        padding: 1em 2em;
+    }
+
+    .login_form:first-child {
+        display: none;
+        /* opacity: 1; */
+        transform: none;
+    }
+} 
+
+
+@media screen and (max-width: 900px) and (min-width: 651px) {
+    .login_container,
+    .forms {
+        width: 100%;
+        height: 100%;
+        border-radius: 0;
+        border: none;
+    }
+
+    .forms {
+        gap: 8%;
+    }
+    
+    .login_form {
+        flex: 1;
+        border-radius: 0;
+    }
+
+    .login_container h1 {
+        margin-bottom: 1.5em;
+    }
+
+    .cta {
+        width: 54%;
+        border-radius: 0;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    * {
+        font-size: 0.97em;
+    }
+    .login_container {
+        width: 100%;
+        border-radius: 0;
+        border: none;
+    }
+    
+    .login_form {
+        width: 100%;
+        border-radius: 0;
+        padding: 1em 1em;
+    }
+
+    .cta {
+        border-radius: 0;
+    }
 }

@@ -2,6 +2,8 @@ import Input from "../../form/Input";
 import SubmitButton from "../../form/SubmitButton";
 import styles from "./Login.module.css";
 import GoogleIcon from "../../../img/Google_Icon.png";
+import closedEyeIcon from "../../../img/closedEyePassword.png";
+import openEyeIcon from "../../../img/openEyePassword.png";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "../../layout/Button";
@@ -36,6 +38,16 @@ function Login() {
             })
             .catch(err => console.log(err))
     }, []);
+
+    let resizeTimeout;
+
+    window.addEventListener("resize", () => {
+        clearTimeout(resizeTimeout);
+
+        resizeTimeout = setTimeout(() => {
+            window.location.reload();
+        }, 500); 
+    });
     
     return (
         <main className={styles.login}>
@@ -66,7 +78,7 @@ function Login() {
                             name="phone" 
                             type="tel" 
                             placeholder="(XX) 9XXXX-XXXX" 
-                            text="Telefone" 
+                            text="Celular" 
                             handleOnChange={(e) => LCF.handleChange(e, user, setUser)} 
                             handleOnInput={LFF.formatPhone}
                         />
@@ -79,6 +91,10 @@ function Login() {
                                 text="Senha" 
                                 handleOnChange={(e) => LCF.handlePasswordContainer(user, setUser)} 
                                 handleOnInput={LFF.formatPassword}
+                                img={openEyeIcon}
+                                altImg="Revelar senha"
+                                idImg="eyeIconSignup"
+                                handleOnClickImg={(e) => LTF.changePasswordVisibility(isLogin, false, openEyeIcon, closedEyeIcon)}
                             />
 
                             <Input 
@@ -102,26 +118,28 @@ function Login() {
                     <form className={styles.login_form} id="login">
                         <h1>Entrar</h1>
 
-                        <div className={styles.signup_fields}>
-                            {loginTypeIsEmail ? (
-                                <Input 
-                                    name="emailLogin" 
-                                    type="email" 
-                                    placeholder="Insira seu e-mail" 
-                                    text="E-mail" 
-                                    handleOnChange={(e) => LCF.handleChange(e, user, setUser)} 
-                                    handleOnInput={LFF.formatEmail}
-                                />
-                            ) : (
-                                <Input 
-                                    name="phoneLogin" 
-                                    type="phone" 
-                                    placeholder="(XX) 9XXXX-XXXX" 
-                                    text="Telefone" 
-                                    handleOnChange={(e) => LCF.handleChange(e, user, setUser)} 
-                                    handleOnInput={LFF.formatPhone}
-                                />
-                            )}
+                        <div className={styles.login_fields}>
+                            <div id="changingField">
+                                {loginTypeIsEmail ? (
+                                    <Input 
+                                        name="emailLogin" 
+                                        type="email" 
+                                        placeholder="Insira seu e-mail" 
+                                        text="E-mail" 
+                                        handleOnChange={(e) => LCF.handleChange(e, user, setUser)} 
+                                        handleOnInput={LFF.formatEmail}
+                                    />
+                                ) : (
+                                    <Input 
+                                        name="phoneLogin" 
+                                        type="phone" 
+                                        placeholder="(XX) 9XXXX-XXXX" 
+                                        text="Celular" 
+                                        handleOnChange={(e) => LCF.handleChange(e, user, setUser)} 
+                                        handleOnInput={LFF.formatPhone}
+                                    />
+                                )}
+                            </div>
 
                             <Input 
                                 name="passwordLogin" 
@@ -130,6 +148,10 @@ function Login() {
                                 text="Senha" 
                                 handleOnChange={(e) => LCF.handleChange(e, user, setUser)} 
                                 handleOnInput={LFF.formatPassword}
+                                img={openEyeIcon}
+                                altImg="Revelar senha"
+                                idImg="eyeIconLogin"
+                                handleOnClickImg={(e) => LTF.changePasswordVisibility(isLogin, false, openEyeIcon, closedEyeIcon)}
                             />
 
                             <div className={styles.buttons}>
@@ -146,7 +168,7 @@ function Login() {
 
                                 <Button 
                                     type="button" 
-                                    text={loginTypeIsEmail ? "Entrar com telefone" : "Entrar com e-mail"} 
+                                    text={loginTypeIsEmail ? "Entrar com celular" : "Entrar com e-mail"} 
                                     handleClick={(e) => LTF.loginTypeTransition(setUser, setLoginTypeIsEmail, loginTypeIsEmail)} 
                                     customClass={styles.login_button}
                                 />
@@ -156,18 +178,22 @@ function Login() {
                 </div>
 
                 <div className={styles.cta} id="cta">
-                    <div className={styles.cta_title}>
-                        <h2>CineShow</h2>
-                        <hr/>
-                    </div>
-
-                    <div className={styles.cta_text}>
-                        <p>Prepare-se para voar pelo universo dos filmes e ter experiências inesquecíveis com CineShow!</p>
+                    <div className={styles.cta_text} id="cta_text">
+                        <div className={styles.cta_title}>
+                            <h2>CineShow</h2>
+                            <hr/>
+                        </div>
 
                         {isLogin ? (
-                            <p>Crie uma conta e aproveite todos os nossos serviços.</p>
+                            <>
+                                <p>Prepare-se para voar pelo universo dos filmes e ter experiências inesquecíveis com CineShow!</p>
+                                <p>Crie uma conta e aproveite todos os nossos serviços.</p>
+                            </>
                         ) : (
-                            <p>Entre na sua conta e volte a aproveitar nossos serviços.</p>
+                            <>
+                                <p>Viaje novamente pelo universo dos filmes com CineShow!</p>
+                                <p>Entre na sua conta e volte a aproveitar nossos serviços.</p>
+                            </>
                         )}
 
                         <span>ou</span>
@@ -175,7 +201,7 @@ function Login() {
                         <Button 
                             type="button" 
                             text={isLogin ? "Entrar em uma conta" : "Criar conta"} 
-                            handleClick={(e) => LTF.loginFormTransition(isLogin, setIsLogin, setUser)} 
+                            handleClick={(e) => LTF.loginFormTransition(isLogin, setIsLogin, setUser, openEyeIcon)} 
                             customClass={styles.login_button}
                         />
                     </div>

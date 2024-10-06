@@ -4,6 +4,10 @@ function formatName(e) {
     if (name.length > 0) {
         name = name.replace(/\s+/g, " ").split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
     }
+
+    if (name.length > 50) {
+        name = name.slice(0, 50);
+    }
     
     e.target.value = name;
 }
@@ -34,6 +38,10 @@ function formatPhone(e) {
 function formatPassword(e) {
     let password = e.target.value.trim().replace(/[^a-zA-Z\d]+/g, "");
     password = password.replace(/\s/g, "");
+
+    if (password.length > 20) {
+        password = password.slice(0, 20);
+    }
     
     e.target.value = password;
 }
