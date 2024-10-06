@@ -1,0 +1,45 @@
+.message {
+    height: 3em;
+    width: max-content;
+    position: fixed;
+    top: 1em;
+    right: 1em;
+    display: flex;
+    align-items: center;
+    gap: 0.6em;
+    padding: 1em 0.8em 1em 0.5em;
+    border-radius: 10px;
+    border: 2px solid var(--font-color-light);
+    z-index: 1;
+}
+
+.message, 
+.message * {
+    background-color: var(--font-color-dark);
+    color: var(--font-color-light);
+    font-weight: bold;
+}
+
+.message img {
+    height: 2em;
+}
+
+.buttons {
+    display: flex;
+    gap: 0.4em;
+    margin-left: 1em;
+}
+
+.buttons button {
+    border-radius: 6px;
+    padding: 0.2em 0.4em;
+    border: 1px solid var(--font-color-light);
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.buttons button:hover {
+    background-color: var(--font-color-light);
+    color: var(--font-color-dark);
+
+}

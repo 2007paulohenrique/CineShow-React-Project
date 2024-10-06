@@ -1,8 +1,12 @@
+import LTF from "./LoginTransitionFunctions";
+
 function handleChange(e, user, setUser) {
+    LTF.changeValidationMessageVisibility(e.target.name, "hidden");
     setUser({...user, [e.target.name]: e.target.value.trim()});
 }
 
 function handlePasswordContainer(user, setUser) {
+    LTF.changeValidationMessageVisibility("confirmedPassword", "hidden");
     setUser({...user, "password": null})
 
     const password = document.getElementById("password").value;

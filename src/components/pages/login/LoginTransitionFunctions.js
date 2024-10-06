@@ -112,10 +112,17 @@ function changePasswordVisibility(isLogin, toHidden, openEye, closedEye) {
     }
 }
 
+function changeValidationMessageVisibility(field, visibility) {
+    const message = document.getElementById(field + "ValidationMessage");
+
+    message.style.setProperty("visibility", visibility);
+}
+
 const loginTransitionFunctions = {
     loginTypeTransition,
     loginFormTransition,
     changePasswordVisibility,
+    changeValidationMessageVisibility,
 }
 
 export default loginTransitionFunctions;

@@ -7,21 +7,18 @@ import openEyeIcon from "../../../img/openEyePassword.png";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "../../layout/Button";
-// Funções para as mudanças nos campos dos formulários de login/registro.
 import LCF from "./LoginChangingFunctions";
-// Funções para as transições.
 import LTF from "./LoginTransitionFunctions";
-// Funções de formatação de dados.
 import LFF from "./LoginFormattingFunctions";
-// Funções para os envios dos formulários de login/registro.
 import LSF from "./LoginSubmitFunctions";
+import Message from "../../layout/Message";
 
 function Login() {
     const [user, setUser] = useState({});
     const [users, setUsers] = useState([]);
-    // Estado para o tipo do formulário. Caso seja login, true, caso seja sign up, false.
     const [isLogin, setIsLogin] = useState(false);
     const [loginTypeIsEmail, setLoginTypeIsEmail] = useState(true);
+    const [message, setMessage] = useState(null);
 
     const navigate = useNavigate();
 
@@ -51,6 +48,7 @@ function Login() {
     
     return (
         <main className={styles.login}>
+            {message && <Message type={message.type} message={message.message}/>}
             <div className={styles.login_container}>
                 <div className={styles.forms}>
                     <form className={styles.login_form} id="signup">
@@ -63,6 +61,7 @@ function Login() {
                             text="Nome" 
                             handleOnChange={(e) => LCF.handleChange(e, user, setUser)} 
                             handleOnInput={LFF.formatName}
+                            validationMessage="O nome não pode ter mais que 50 caracteres."
                         />
 
                         <Input 
@@ -72,6 +71,7 @@ function Login() {
                             text="E-mail" 
                             handleOnChange={(e) => LCF.handleChange(e, user, setUser)} 
                             handleOnInput={LFF.formatEmail}
+                            validationMessage="E-mail inválido."
                         />
 
                         <Input 
@@ -81,6 +81,7 @@ function Login() {
                             text="Celular" 
                             handleOnChange={(e) => LCF.handleChange(e, user, setUser)} 
                             handleOnInput={LFF.formatPhone}
+                            validationMessage="Número de celular inválido."
                         />
 
                         <div className={styles.password_container}>
@@ -92,10 +93,10 @@ function Login() {
                                 handleOnChange={(e) => LCF.handlePasswordContainer(user, setUser)} 
                                 handleOnInput={LFF.formatPassword}
                                 img={openEyeIcon}
-                                altImg="Revelar senha"
+                                altImg="Show password"
                                 idImg="eyeIconSignup"
                                 handleOnClickImg={(e) => LTF.changePasswordVisibility(isLogin, false, openEyeIcon, closedEyeIcon)}
-                            />
+                                />
 
                             <Input 
                                 name="confirmedPassword" 
@@ -103,11 +104,12 @@ function Login() {
                                 placeholder="Confirme sua senha" 
                                 handleOnChange={(e) => LCF.handlePasswordContainer(user, setUser)} 
                                 handleOnInput={LFF.formatPassword}
+                                validationMessage="A senha deve ter pelo menos uma letra maiúscula, uma minúscula, um número e ter entre 6 e 20 caracteres."
                             />
                         </div>
 
                         <div className={styles.buttons}>
-                            <SubmitButton  text="Criar conta" handleSubmit={(e) => LSF.signUpSubmit(e, isLogin, user, users, navigate)}/>
+                            <SubmitButton  text="Criar conta" handleSubmit={(e) => LSF.signUpSubmit(e, isLogin, user, users, navigate, setMessage)}/>
 
                             <button type="button" className={styles.sign_in_google}>
                                 <img src={GoogleIcon} alt="Google Icon"/>Criar com Google
@@ -149,15 +151,16 @@ function Login() {
                                 handleOnChange={(e) => LCF.handleChange(e, user, setUser)} 
                                 handleOnInput={LFF.formatPassword}
                                 img={openEyeIcon}
-                                altImg="Revelar senha"
+                                altImg="Show password"
                                 idImg="eyeIconLogin"
                                 handleOnClickImg={(e) => LTF.changePasswordVisibility(isLogin, false, openEyeIcon, closedEyeIcon)}
+                                validationMessage="E-mail e/ou senha incorretos."
                             />
 
                             <div className={styles.buttons}>
                                 <SubmitButton  
                                     text="Entrar" 
-                                    handleSubmit={(e) => LSF.loginSubmit(e, isLogin, user, users, loginTypeIsEmail, navigate)}
+                                    handleSubmit={(e) => LSF.loginSubmit(e, isLogin, user, users, loginTypeIsEmail, navigate, setMessage)}
                                 />
 
                                 <button type="button" className={styles.sign_in_google}>

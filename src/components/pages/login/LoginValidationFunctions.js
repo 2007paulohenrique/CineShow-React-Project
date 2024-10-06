@@ -13,7 +13,12 @@ function validateNameLength(name) {
 }
 
 function validateEmail(email) {
+    if (email.length > 256) {
+        return true;
+    }
+
     const emailRegex = /^[a-zA-Z0-9_.±]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/;
+
     return !emailRegex.test(email);
 }
 

@@ -13,7 +13,12 @@ function formatName(e) {
 }
 
 function formatEmail(e) {
-    const email = e.target.value.replace(/\s/g, "");
+    let email = e.target.value.replace(/\s/g, "");
+
+    if (email.length > 256) {
+        email = email.slice(0, 256); 
+    }
+
     e.target.value = email;
 }
 

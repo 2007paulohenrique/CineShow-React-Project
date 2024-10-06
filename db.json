@@ -3,11 +3,18 @@
   "movies": [],
   "users": [
     {
-      "id": "9873",
+      "id": "ea15",
       "name": "Paulo Henrique",
-      "email": "$2a$12$WV0AH7zsRz6kpbdEXYVgVOTg1w66fFDIOTusVQKm8T4fMvvCDBMYa",
-      "phone": "$2a$12$7/23LgNSz1q4YSmZPcq0BOSo5mg1zTGqWMC4o7dsssNn/B6z/5.6W",
-      "password": "$2a$12$GCaQhnOe.Wd5RKc/Zrx9ausyVsHkmbnZ9oKCFYmR9qBgRoMWSlwpm"
+      "email": "$2a$12$o8WQHAm4QMNPYyK45p4.Ae9URL.Koch3/s2swJ8feBxZyJHBPikQO",
+      "phone": "$2a$12$nu5L9uuM31x.zxhsmBEfleVIU/mUDoBfKNNYkSVI.x0QEm14keFuC",
+      "password": "$2a$12$mBqA6qN1ug46yd2kmLANdehoCJHVFo/NJu5jPU7Ov2AiRsYoMuq2u"
+    },
+    {
+      "id": "b85c",
+      "name": "Ceufebru",
+      "email": "$2a$12$s5VKpiTObB07r3/jT6FhCelDeCaXGYCZyVqDPfRIZdBbORBo9WeF6",
+      "phone": "$2a$12$Cr3WqCrRGF6EnAnn.02.3O7e1ShzXmcVLWgiufVOf.HVCZ/q.t5IC",
+      "password": "$2a$12$v0ghIvGIqA12/.g1MbVmMOlR4UkZWVWyDZqTz.94Acyqoq.kvQDkS"
     }
   ]
 }

@@ -24,7 +24,15 @@
     height: 1em;
     display: block;
     position: absolute;
-    bottom: 18%;
+    top: 2.5em;
     right: 1em;
     cursor: pointer;
+}
+
+.validationMessage {
+    font-size: 0.8em;
+    margin: 0 1em;
+    color: var(--theme-font-color);
+    text-align: justify;
+    visibility: hidden;
 }

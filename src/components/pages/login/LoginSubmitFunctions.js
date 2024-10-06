@@ -1,38 +1,67 @@
 import LVF from "./LoginValidationFunctions";
+import LTF from "./LoginTransitionFunctions";
 
-async function signUpSubmit(e, isLogin, user, users, navigate) {
+async function signUpSubmit(e, isLogin, user, users, navigate, setMessage) {
     console.log(user);
     e.preventDefault();
 
+    setMessage(null);
+
+    LTF.changeValidationMessageVisibility("name", "hidden");
+    LTF.changeValidationMessageVisibility("email", "hidden");
+    LTF.changeValidationMessageVisibility("phone", "hidden");
+    LTF.changeValidationMessageVisibility("confirmedPassword", "hidden");
+
     if (LVF.validateEmptyField(isLogin)) {
-        console.log("campos vazios");
+        if (timer) clearTimeout(timer);
+        
+        const newMessage = {type: "error", message: "Preencha todos os campos."};
+        setMessage(newMessage);
+        
+        timer = setTimeout(() => {
+            setMessage(null);
+            timer = null
+        }, 3000);
+
         return;
     }
     
     if (LVF.validateNameLength(user.name)) {
-        console.log("nome muito longo");
+        LTF.changeValidationMessageVisibility("name", "visible");
         return;  
     }
     
     if (LVF.validateEmail(user.email)) {
-        console.log("email incorreto");
+        LTF.changeValidationMessageVisibility("email", "visible");
         return;  
     }
 
     if (LVF.validatePhone(user.phone)) {
-        console.log("telefone invalido");
+        LTF.changeValidationMessageVisibility("phone", "visible");
         return;  
     }
 
     if (LVF.validatePassword(user.password)) {
-        console.log("senha invalida");
+        if (user.password) {
+            LTF.changeValidationMessageVisibility("confirmedPassword", "visible");
+        }
+
         return;  
     }
     
     const userExists = await LVF.validateUserExistence(user, users);
 
     if (userExists) {
-        console.log("usuario ja existe");
+        if (timer) clearTimeout(timer);
+        
+        const newMessage = {type: "error", message: "Um usuário já utiliza esse e-mail ou número de celular."};
+        setMessage(newMessage);
+        
+        timer = setTimeout(() => {
+            setMessage(null);
+            timer = null
+        }, 3000);
+
         return;  
     }
 
@@ -51,28 +80,37 @@ async function signUpSubmit(e, isLogin, user, users, navigate) {
     })
         .then(resp => resp.json())
         .then(data => {
-            // setUsers([...users, data]);
-            // setUser(newUser);
             navigate("/");
         })
         .catch(err => console.log(err))
 }
 
-async function loginSubmit(e, isLogin, user, users, loginType, navigate) {
+let timer;
+
+async function loginSubmit(e, isLogin, user, users, loginType, navigate, setMessage) {
     console.log(user);
     e.preventDefault();
+
+    setMessage(null);
     
-    if (LVF.validateEmptyField(isLogin)) {
-        console.log("campos vazios");
+    if (LVF.validateEmptyField(isLogin)) {    
+        if (timer) clearTimeout(timer);
+        
+        const newMessage = {type: "error", message: "Preencha todos os campos."};
+        setMessage(newMessage);
+        
+        timer = setTimeout(() => {
+            setMessage(null);
+            timer = null
+        }, 3000);
+        
         return;
     }
     
     const userMatch = await LVF.validateUserMatchLogin(user, users, loginType);
     
-    console.log(userMatch);
-
     if (!userMatch) {
-        console.log("Email ou senha incorretos.");
+        LTF.changeValidationMessageVisibility("passwordLogin", "visible");
         return;
     }
     
